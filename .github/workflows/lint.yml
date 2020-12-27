@@ -69,26 +69,29 @@ jobs:
       - name: Yarn install
         run: yarn
 
-      - name: Run linters (Frontend)
+      - if: ${{ steps.filter.outputs.frontend == 'true' }}
+        name: Run linters (Frontend)
         uses: wearerequired/lint-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint: true
-          eslint_args: "${{ steps.filter.outputs.frontend }}"
+          eslint_args: "${{ steps.filter.outputs.frontend_files }}"
           eslint_dir: frontend/
           
-      - name: Run linters (Backend)
+      - if: ${{ steps.filter.outputs.backend == 'true' }}
+        name: Run linters (Backend)
         uses: wearerequired/lint-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint: true
-          eslint_args: "${{ steps.filter.outputs.backend }}"
+          eslint_args: "${{ steps.filter.outputs.backend_files }}"
           eslint_dir: backend/
 
-      - name: Run linters (Common)
+      - if: ${{ steps.filter.outputs.common == 'true' }}
+        name: Run linters (Common)
         uses: wearerequired/lint-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint: true
-          eslint_args: "${{ steps.filter.outputs.common }}"
+          eslint_args: "${{ steps.filter.outputs.common_files }}"
           eslint_dir: common/
