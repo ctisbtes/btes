@@ -11,7 +11,7 @@ import { SimulationDeleteNodePayload } from '../common/socketPayloads/Simulation
 import { SimulationNodeDeletedPayload } from '../common/socketPayloads/SimulationNodeDeletedPayload';
 import { SimulationRequestSnapshotPayload } from '../common/socketPayloads/SimulationRequestStatePayload';
 import { SimulationSnapshotReportPayload } from '../common/socketPayloads/SimulationSnapshotReportPayload';
-import { SimulationUpdateNodePositionPayload } from '../common/socketPayloads/SimulationUpdateNodePositionPayload';
+                        import { SimulationUpdateNodePositionPayload } from '../common/socketPayloads/SimulationUpdateNodePositionPayload';
 import { SimulationNodePositionUpdatedPayload } from '../common/socketPayloads/SimulationNodePositionUpdatedPayload';
 
 class SimulationBridge {

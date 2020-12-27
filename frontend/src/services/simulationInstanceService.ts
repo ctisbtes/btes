@@ -7,7 +7,7 @@ class SimulationInstanceService {
     const response = await axios.get<string>(
       '/api/rest/simulationInstanceBroker/create'
     ); // 'await' isteğin cevabını bekliyor
-    const simulationUid = response.data;
+                            const simulationUid = response.data;
 
     console.log('simulation create response: ', response);
 
