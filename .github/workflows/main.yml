@@ -1,0 +1,94 @@
+name: Lint
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Read .nvmrc
+        id: nvmrc
+        uses: browniebroke/read-nvmrc-action@v1
+
+      - run: |
+          echo "Version from .nvmrc: ${{ steps.nvmrc.outputs.node_version }}"
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '${{ steps.nvmrc.outputs.node_version }}'
+
+      # - name: Get changed files
+      #   id: files
+      #   uses: jitterbit/get-changed-files@v1
+      #   with:
+      #     format: 'space-delimited'
+      #
+      # - run: |
+      #     echo "Changed files:"
+      #     for file in ${{ steps.files.outputs.all }}; do
+      #       echo "${changed_file}"
+      #     done
+
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          list-files: shell
+
+          filters: |
+            frontend:
+              - added|modified: './frontend/**'
+            backend:
+              - added|modified: './backend/**'
+            common:
+              - added|modified: './common/**'
+
+      - run: |
+          echo "Changed files:"
+          echo "  Frontend:"
+          for file in ${{ steps.filter.outputs.frontend }}; do
+            echo "    ${changed_file}"
+          done
+          echo "  Backend:"
+          for file in ${{ steps.filter.outputs.backend }}; do
+            echo "    ${changed_file}"
+          done
+          echo "  Common:"
+          for file in ${{ steps.filter.outputs.common }}; do
+            echo "    ${changed_file}"
+          done
+
+      - name: Yarn install
+        run: yarn
+
+      - name: Run linters (Frontend)
+        uses: wearerequired/lint-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          eslint: true
+          eslint_args: "${{ steps.filter.outputs.frontend }}"
+          eslint_dir: frontend/
+          
+      - name: Run linters (Backend)
+        uses: wearerequired/lint-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          eslint: true
+          eslint_args: "${{ steps.filter.outputs.backend }}"
+          eslint_dir: backend/
+
+      - name: Run linters (Common)
+        uses: wearerequired/lint-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          eslint: true
+          eslint_args: "${{ steps.filter.outputs.common }}"
+          eslint_dir: common/
