@@ -54,15 +54,15 @@ jobs:
       - run: |
           echo "Changed files:"
           echo "  Frontend:"
-          for file in ${{ steps.filter.outputs.frontend }}; do
+          for file in ${{ steps.filter.outputs.frontend_files }}; do
             echo "    ${changed_file}"
           done
           echo "  Backend:"
-          for file in ${{ steps.filter.outputs.backend }}; do
+          for file in ${{ steps.filter.outputs.backend_files }}; do
             echo "    ${changed_file}"
           done
           echo "  Common:"
-          for file in ${{ steps.filter.outputs.common }}; do
+          for file in ${{ steps.filter.outputs.common_files }}; do
             echo "    ${changed_file}"
           done
 
