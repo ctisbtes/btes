@@ -52,19 +52,19 @@ jobs:
         name: Prune paths (frontend)
         id: frontend_paths
         run: |
-          echo "::set-output name=output::${echo ${{ steps.filter.outputs.frontend_files }} | sed 's#frontend/##g'}"
+          echo "::set-output name=output::$(echo ${{ steps.filter.outputs.frontend_files }} | sed 's#frontend/##g')"
 
       - if: ${{ steps.filter.outputs.backend == 'true' }}
         name: Prune paths (backend)
         id: backend_paths
         run: |
-          echo "::set-output name=output::${echo ${{ steps.filter.outputs.backend_files }} | sed 's#backend/##g'}"
+          echo "::set-output name=output::$(echo ${{ steps.filter.outputs.backend_files }} | sed 's#backend/##g')"
 
       - if: ${{ steps.filter.outputs.common == 'true' }}
         name: Prune paths (common)
         id: common_paths
         run: |
-          echo "::set-output name=output::${echo ${{ steps.filter.outputs.common_files }} | sed 's#common/##g'}"
+          echo "::set-output name=output::$(echo ${{ steps.filter.outputs.common_files }} | sed 's#common/##g')"
 
       - name: Yarn install
         run: yarn
