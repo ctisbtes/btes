@@ -48,21 +48,23 @@ jobs:
           echo "  Common:"
           printf "    %s\n" ${{ steps.filter.outputs.common_files }}
 
-      - name: Prune paths
-        id: paths
+      - if: ${{ steps.filter.outputs.frontend == 'true' }}
+        name: Prune paths (frontend)
+        id: frontend_paths
         run: |
-          echo "::set-output name=frontend::${echo ${{ steps.filter.outputs.frontend_files }} | sed 's#frontend/##g'}"
-          echo "::set-output name=backend::${echo ${{ steps.filter.outputs.backend_files }} | sed 's#backend/##g'}"
-          echo "::set-output name=common::${echo ${{ steps.filter.outputs.common_files }} | sed 's#common/##g'}"
+          echo "::set-output name=output::${echo ${{ steps.filter.outputs.frontend_files }} | sed 's#frontend/##g'}"
 
-      - run: |
-          echo "Changed files (pruned):"
-          echo "  Frontend:"
-          printf "    %s\n" ${{ steps.paths.outputs.frontend }}
-          echo "  Backend:"
-          printf "    %s\n" ${{ steps.paths.outputs.backend }}
-          echo "  Common:"
-          printf "    %s\n" ${{ steps.paths.outputs.common }}
+      - if: ${{ steps.filter.outputs.backend == 'true' }}
+        name: Prune paths (backend)
+        id: backend_paths
+        run: |
+          echo "::set-output name=output::${echo ${{ steps.filter.outputs.backend_files }} | sed 's#backend/##g'}"
+
+      - if: ${{ steps.filter.outputs.common == 'true' }}
+        name: Prune paths (common)
+        id: common_paths
+        run: |
+          echo "::set-output name=output::${echo ${{ steps.filter.outputs.common_files }} | sed 's#common/##g'}"
 
       - name: Yarn install
         run: yarn
@@ -73,7 +75,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint: true
-          eslint_args: "${{ steps.paths.outputs.frontend }}"
+          eslint_args: "${{ steps.frontend_paths.outputs.output }}"
           eslint_dir: frontend/
           
       - if: ${{ steps.filter.outputs.backend == 'true' }}
@@ -82,7 +84,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint: true
-          eslint_args: "${{ steps.paths.outputs.backend }}"
+          eslint_args: "${{ steps.backend_paths.outputs.output }}"
           eslint_dir: backend/
 
       - if: ${{ steps.filter.outputs.common == 'true' }}
@@ -91,5 +93,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint: true
-          eslint_args: "${{ steps.paths.outputs.common }}"
+          eslint_args: "${{ steps.common_paths.outputs.output }}"
           eslint_dir: common/
