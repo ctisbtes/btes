@@ -22,7 +22,7 @@
     "lint:check:frontend": "yarn frontend lint:check",
     "lint:check:common": "yarn common lint:check",
     "lint:check": "run-p -l lint:check:*",
-    "lint:fix:backend": "yarn backend lint:fix",
+            "lint:fix:backend": "yarn backend lint:fix",
     "lint:fix:frontend": "yarn frontend lint:fix",
     "lint:fix:common": "yarn common lint:fix",
     "lint:fix": "run-p -l lint:fix:*",

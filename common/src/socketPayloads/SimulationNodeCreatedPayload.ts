@@ -1,5 +1,5 @@
 export interface SimulationNodeCreatedPayload {
   nodeUid: string;
-  positionX: number;
+        positionX: number;
   positionY: number;
 }

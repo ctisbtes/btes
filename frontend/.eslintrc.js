@@ -25,7 +25,7 @@ module.exports = {
     'prettier/flowtype',
     'prettier/prettier',
     'prettier/react',
-    'prettier/standard',
+            'prettier/standard',
     'prettier/unicorn',
     'prettier/vue',
   ],

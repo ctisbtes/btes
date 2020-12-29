@@ -15,7 +15,7 @@ import { SimulationUpdateNodePositionPayload } from '../common/socketPayloads/Si
 import { SimulationNodePositionUpdatedPayload } from '../common/socketPayloads/SimulationNodePositionUpdatedPayload';
 
 class SimulationBridge {
-  private readonly simulationMap: { [simulationUid: string]: Simulation } = {};
+                private readonly simulationMap: { [simulationUid: string]: Simulation } = {};
   private readonly nsMap: { [simulationUid: string]: Namespace } = {};
 
   private readonly listenerMap: {

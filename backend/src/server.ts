@@ -19,7 +19,7 @@ fatalAssert(
 // Start up the REST server
 app.listen(restPort, () =>
   console.log(
-    `REST server:\thttp://localhost:${restPort}\nREST Swagger:\thttp://localhost:${restPort}/swagger`
+          `REST server:\thttp://localhost:${restPort}\nREST Swagger:\thttp://localhost:${restPort}/swagger`
   )
 );
 

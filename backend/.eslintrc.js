@@ -30,6 +30,6 @@ module.exports = {
   ],
   rules: {
     'prettier/prettier': 'error',
-    '@typescript-eslint/no-empty-interface': 'off',
+            '@typescript-eslint/no-empty-interface': 'off',
   },
 };

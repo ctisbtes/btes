@@ -14,7 +14,7 @@ class SimulationInstanceService {
     return simulationUid;
   }
 
-  public async check(simulationUid: string): Promise<boolean> {
+          public async check(simulationUid: string): Promise<boolean> {
     console.log('checking simulation instance: ', simulationUid);
 
     const response = await axios.get<boolean>(
