@@ -1,6 +1,6 @@
-import { SocketEventPayload } from '../socketManifest/SocketManifest';
+import { TypedSocketEventPayload } from '../typedSockets/TypedSocketEventPayload';
 
-export interface SimulationCreateNodePayload extends SocketEventPayload {
+export interface SimulationCreateNodePayload extends TypedSocketEventPayload {
   positionX: number;
   positionY: number;
 }
