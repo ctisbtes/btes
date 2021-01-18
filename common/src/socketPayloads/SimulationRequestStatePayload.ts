@@ -1,1 +1,4 @@
-export interface SimulationRequestSnapshotPayload {}
+import { TypedSocketEventPayload } from '../typedSocketsCore/TypedSocketEventPayload';
+
+export interface SimulationRequestSnapshotPayload
+  extends TypedSocketEventPayload {}

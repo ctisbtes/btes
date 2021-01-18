@@ -1,4 +1,3 @@
-import { Socket, Namespace } from 'socket.io';
 import { simulationBridge } from './simulationBridge';
 import { SimulationPingPayload } from '../common/socketPayloads/SimulationPingPayload';
 import { SimulationCreateNodePayload } from '../common/socketPayloads/SimulationCreateNodePayload';
@@ -8,28 +7,42 @@ import { emitWelcome } from '../utils/emitWelcome';
 import { SimulationDeleteNodePayload } from '../common/socketPayloads/SimulationDeleteNodePayload';
 import { SimulationRequestSnapshotPayload } from '../common/socketPayloads/SimulationRequestStatePayload';
 import { SimulationUpdateNodePositionPayload } from '../common/socketPayloads/SimulationUpdateNodePositionPayload';
+import { SimulationSocketApiManifest } from '../common/socketApiManifests/SimulationSocketApiManifest';
+import { TypedSocketNamespace } from '../utils/typedSocketsBackend/TypedSocketNamespace';
+import { TypedSocketSocket } from '../utils/typedSocketsBackend/TypedSocketSocket';
 
 export class SimulationNamespaceListener {
   private readonly simulationUid: string;
-  private readonly ns: Namespace;
+  private readonly ns: TypedSocketNamespace<SimulationSocketApiManifest>;
 
-  constructor(simulationUid: string, ns: Namespace) {
+  constructor(
+    simulationUid: string,
+    ns: TypedSocketNamespace<SimulationSocketApiManifest>
+  ) {
     this.simulationUid = simulationUid;
     this.ns = ns;
 
-    ns.on(socketEvents.native.connect, (socket) => {
-      this.setupSocket(socket);
+    ns.raw.on(socketEvents.native.connect, (socket) => {
+      const typedSocket = new TypedSocketSocket<SimulationSocketApiManifest>(
+        socket
+      );
+
+      this.setupSocket(typedSocket);
     });
   }
 
-  private readonly setupSocket = (socket: Socket) => {
+  private readonly setupSocket = (
+    socket: TypedSocketSocket<SimulationSocketApiManifest>
+  ) => {
     this.registerListeners(socket);
     emitWelcome(socket, this.simulationUid);
   };
 
-  private readonly registerListeners = (socket: Socket): void => {
+  private readonly registerListeners = (
+    socket: TypedSocketSocket<SimulationSocketApiManifest>
+  ): void => {
     // native events
-    socket.on(
+    socket.raw.on(
       socketEvents.native.disconnect,
       this.teardownSocket.bind(this, socket)
     );
@@ -54,7 +67,9 @@ export class SimulationNamespaceListener {
     );
   };
 
-  private readonly teardownSocket = (socket: Socket): void => {
+  private readonly teardownSocket = (
+    socket: TypedSocketSocket<SimulationSocketApiManifest>
+  ): void => {
     /* This would NOT work:
      *    socket.removeListener(socketEvents.simulation.ping, this.handleSimulationPing);
      * because the socketLoggerMiddleware is wrapping the listeners.
@@ -62,9 +77,9 @@ export class SimulationNamespaceListener {
      *    socket.removeAllListeners(socketEvents.simulation.ping);
      * Tarık, 2020-12-22 07:02
      */
-    socket.removeAllListeners();
+    socket.raw.removeAllListeners();
 
-    const clientsLeft = getClientCount(this.ns);
+    const clientsLeft = getClientCount(this.ns.raw);
     console.log(
       `${clientsLeft} clients remaining in namespace ${this.simulationUid}`
     );

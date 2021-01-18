@@ -3,6 +3,8 @@ import http from 'http';
 import { socketEvents } from './common/constants/socketEvents';
 import { emitWelcome } from './utils/emitWelcome';
 import { socketLoggerMiddleware } from './socketMiddleware/socketLoggerMiddleware';
+import { TypedSocketNamespace } from './utils/typedSocketsBackend/TypedSocketNamespace';
+import { SimulationSocketApiManifest } from './common/socketApiManifests/SimulationSocketApiManifest';
 
 class SocketManager {
   private httpServer: http.Server = http.createServer();
@@ -23,10 +25,12 @@ class SocketManager {
     this.httpServer.listen(port, listeningListener);
   };
 
-  public readonly getOrCreateNamespace = (namespace: string): io.Namespace => {
+  public readonly getOrCreateNamespace = (
+    namespace: string
+  ): TypedSocketNamespace<SimulationSocketApiManifest> => {
     const ns = this.socketServer.of(namespace);
     ns.use(socketLoggerMiddleware);
-    return ns;
+    return new TypedSocketNamespace<SimulationSocketApiManifest>(ns);
   };
 }
 

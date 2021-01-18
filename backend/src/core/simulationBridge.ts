@@ -1,4 +1,3 @@
-import { Namespace } from 'socket.io';
 import { Simulation } from './Simulation';
 import { fatalAssert } from '../utils/fatalAssert';
 import { socketEvents } from '../common/constants/socketEvents';
@@ -13,10 +12,14 @@ import { SimulationRequestSnapshotPayload } from '../common/socketPayloads/Simul
 import { SimulationSnapshotReportPayload } from '../common/socketPayloads/SimulationSnapshotReportPayload';
 import { SimulationUpdateNodePositionPayload } from '../common/socketPayloads/SimulationUpdateNodePositionPayload';
 import { SimulationNodePositionUpdatedPayload } from '../common/socketPayloads/SimulationNodePositionUpdatedPayload';
+import { TypedSocketNamespace } from '../utils/typedSocketsBackend/TypedSocketNamespace';
+import { SimulationSocketApiManifest } from '../common/socketApiManifests/SimulationSocketApiManifest';
 
 class SimulationBridge {
   private readonly simulationMap: { [simulationUid: string]: Simulation } = {};
-  private readonly nsMap: { [simulationUid: string]: Namespace } = {};
+  private readonly nsMap: {
+    [simulationUid: string]: TypedSocketNamespace<SimulationSocketApiManifest>;
+  } = {};
 
   private readonly listenerMap: {
     [simulaitonUid: string]: SimulationNamespaceListener;
@@ -24,7 +27,7 @@ class SimulationBridge {
 
   public readonly setupNewSimulation = (
     simulationUid: string,
-    ns: Namespace
+    ns: TypedSocketNamespace<SimulationSocketApiManifest>
   ) => {
     const newSimulation = new Simulation(simulationUid);
     const listener = new SimulationNamespaceListener(simulationUid, ns);

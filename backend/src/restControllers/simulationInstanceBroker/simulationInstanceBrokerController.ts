@@ -23,7 +23,7 @@ export class SimulationInstanceBrokerController extends Controller {
     simulationBridge.setupNewSimulation(uidStr, ns);
 
     console.log(
-      `created simulation instance with uid: ${uidStr} name: ${ns.name}`
+      `created simulation instance with uid: ${uidStr} name: ${ns.raw.name}`
     );
 
     return uidStr;

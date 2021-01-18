@@ -1,1 +1,1 @@
-export type TypedSocketEventPayload = Record<string, unknown>;
+export interface TypedSocketEventPayload {}
