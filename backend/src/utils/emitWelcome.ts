@@ -1,7 +1,7 @@
 import { socketEvents } from '../common/constants/socketEvents';
 import { SimulationSocketApiManifest } from '../common/socketApiManifests/SimulationSocketApiManifest';
 import { SimulationWelcomePayload } from '../common/socketPayloads/SimulationWelcomePayload';
-import { TypedSocketSocket } from './typedSocketsBackend/TypedSocketSocket';
+import { TypedSocket } from './typedSocketsBackend/TypedSocketSocket';
 
 /**
  * Emits a welcome event.
@@ -9,7 +9,7 @@ import { TypedSocketSocket } from './typedSocketsBackend/TypedSocketSocket';
  * @param namespace From which namespace are we welcoming?
  */
 export const emitWelcome = (
-  socket: TypedSocketSocket<SimulationSocketApiManifest>,
+  socket: TypedSocket<SimulationSocketApiManifest>,
   namespace: string
 ): void => {
   const body: SimulationWelcomePayload = {

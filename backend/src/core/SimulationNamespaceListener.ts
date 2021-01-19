@@ -9,7 +9,7 @@ import { SimulationRequestSnapshotPayload } from '../common/socketPayloads/Simul
 import { SimulationUpdateNodePositionPayload } from '../common/socketPayloads/SimulationUpdateNodePositionPayload';
 import { SimulationSocketApiManifest } from '../common/socketApiManifests/SimulationSocketApiManifest';
 import { TypedSocketNamespace } from '../utils/typedSocketsBackend/TypedSocketNamespace';
-import { TypedSocketSocket } from '../utils/typedSocketsBackend/TypedSocketSocket';
+import { TypedSocket } from '../utils/typedSocketsBackend/TypedSocketSocket';
 
 export class SimulationNamespaceListener {
   private readonly simulationUid: string;
@@ -23,23 +23,21 @@ export class SimulationNamespaceListener {
     this.ns = ns;
 
     ns.raw.on(socketEvents.native.connect, (socket) => {
-      const typedSocket = new TypedSocketSocket<SimulationSocketApiManifest>(
-        socket
-      );
+      const typedSocket = new TypedSocket<SimulationSocketApiManifest>(socket);
 
       this.setupSocket(typedSocket);
     });
   }
 
   private readonly setupSocket = (
-    socket: TypedSocketSocket<SimulationSocketApiManifest>
+    socket: TypedSocket<SimulationSocketApiManifest>
   ) => {
     this.registerListeners(socket);
     emitWelcome(socket, this.simulationUid);
   };
 
   private readonly registerListeners = (
-    socket: TypedSocketSocket<SimulationSocketApiManifest>
+    socket: TypedSocket<SimulationSocketApiManifest>
   ): void => {
     // native events
     socket.raw.on(
@@ -68,7 +66,7 @@ export class SimulationNamespaceListener {
   };
 
   private readonly teardownSocket = (
-    socket: TypedSocketSocket<SimulationSocketApiManifest>
+    socket: TypedSocket<SimulationSocketApiManifest>
   ): void => {
     /* This would NOT work:
      *    socket.removeListener(socketEvents.simulation.ping, this.handleSimulationPing);

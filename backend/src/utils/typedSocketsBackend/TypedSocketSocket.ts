@@ -4,7 +4,7 @@ import { SocketApiManifest } from '../../common/typedSocketsCore/SocketApiManife
 import { SocketEventHandler } from '../../common/typedSocketsCore/SocketEventHandler';
 import { StringKeyOf } from '../../common/utils/StringKeyOf';
 
-export class TypedSocketSocket<TManifest extends SocketApiManifest> {
+export class TypedSocket<TManifest extends SocketApiManifest> {
   public readonly raw: io.Socket;
 
   constructor(actual: io.Socket) {
