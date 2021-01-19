@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import io from 'socket.io';
 import { TypedSocketApiManifest } from '../../common/typedSocketsCore/TypedSocketApiManifest';
-import { TypedSocketEventListenerOf } from '../../common/typedSocketsCore/utils/TypedSocketEventListenerOf';
+import { TypedSocketEventListener } from '../../common/typedSocketsCore/TypedSocketEventListener';
 import { TypedSocketEventNamesOf } from '../../common/typedSocketsCore/utils/TypedSocketEventNamesOf';
 
 export class TypedSocketSocket<TManifest extends TypedSocketApiManifest> {
@@ -24,11 +24,7 @@ export class TypedSocketSocket<TManifest extends TypedSocketApiManifest> {
     TEventName extends TypedSocketEventNamesOf<TManifest, 'clientToServer'>
   >(
     eventName: TEventName,
-    listener: TypedSocketEventListenerOf<
-      TManifest,
-      'clientToServer',
-      TEventName
-    >
+    listener: TypedSocketEventListener<TManifest['clientToServer'][TEventName]>
   ): void => {
     this.raw.on(eventName, listener);
   };
@@ -37,11 +33,7 @@ export class TypedSocketSocket<TManifest extends TypedSocketApiManifest> {
     TEventName extends TypedSocketEventNamesOf<TManifest, 'clientToServer'>
   >(
     eventName: TEventName,
-    listener: TypedSocketEventListenerOf<
-      TManifest,
-      'clientToServer',
-      TEventName
-    >
+    listener: TypedSocketEventListener<TManifest['clientToServer'][TEventName]>
   ): void => {
     this.raw.off(eventName, listener);
   };
