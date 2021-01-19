@@ -1,6 +1,6 @@
-import { TypedSocketApiManifest } from '../../common/typedSockets/manifest';
 import { TypedSocketEventNamesOf } from './TypedSocketEventNamesOf';
 import { TypedSocketEventDirectionsOf } from './TypedSocketEventDirectionsOf';
+import { TypedSocketApiManifest } from '../TypedSocketApiManifest';
 
 export type TypedSocketEventPayloadOf<
   TManifest extends TypedSocketApiManifest,
