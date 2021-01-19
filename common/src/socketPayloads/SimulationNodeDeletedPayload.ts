@@ -1,5 +1,5 @@
-import { TypedSocketEventPayload } from '../typedSocketsCore/TypedSocketEventPayload';
+import { SocketEventPayload } from '../typedSocketsCore/SocketEventPayload';
 
-export interface SimulationNodeDeletedPayload extends TypedSocketEventPayload {
+export interface SimulationNodeDeletedPayload extends SocketEventPayload {
   nodeUid: string;
 }

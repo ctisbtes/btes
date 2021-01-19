@@ -1,9 +1,9 @@
 import io from 'socket.io';
 
-import { TypedSocketApiManifest } from '../../common/typedSocketsCore/TypedSocketApiManifest';
+import { SocketApiManifest } from '../../common/typedSocketsCore/SocketApiManifest';
 import { StringKeyOf } from '../../common/utils/StringKeyOf';
 
-export class TypedSocketNamespace<TManifest extends TypedSocketApiManifest> {
+export class TypedSocketNamespace<TManifest extends SocketApiManifest> {
   public readonly raw: io.Namespace;
 
   constructor(actual: io.Namespace) {

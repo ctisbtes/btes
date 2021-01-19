@@ -1,8 +1,8 @@
-import { CamelCase } from '../utils/CamelCase';
-import { TypedSocketApiManifest } from './TypedSocketApiManifest';
+import { SocketApiManifest } from './SocketApiManifest';
+import { CamelCase } from 'type-fest';
 
-export type TypedSocketEventListenerClass<
-  TManifest extends TypedSocketApiManifest,
+export type SocketEventListenerClass<
+  TManifest extends SocketApiManifest,
   TDirection extends keyof TManifest
 > = {
   [TEventName in keyof TManifest[TDirection] &

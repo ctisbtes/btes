@@ -10,9 +10,9 @@ import { SimulationRequestSnapshotPayload } from '../socketPayloads/SimulationRe
 import { SimulationSnapshotReportPayload } from '../socketPayloads/SimulationSnapshotReportPayload';
 import { SimulationUpdateNodePositionPayload } from '../socketPayloads/SimulationUpdateNodePositionPayload';
 import { SimulationWelcomePayload } from '../socketPayloads/SimulationWelcomePayload';
-import { TypedSocketApiManifest } from '../typedSocketsCore/TypedSocketApiManifest';
+import { SocketApiManifest } from '../typedSocketsCore/SocketApiManifest';
 
-export interface SimulationSocketApiManifest extends TypedSocketApiManifest {
+export interface SimulationSocketApiManifest extends SocketApiManifest {
   serverToClient: {
     [socketEvents.simulation.welcome]: SimulationWelcomePayload;
     [socketEvents.simulation.pong]: SimulationPongPayload;

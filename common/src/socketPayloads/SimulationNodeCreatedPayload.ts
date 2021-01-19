@@ -1,6 +1,6 @@
-import { TypedSocketEventPayload } from '../typedSocketsCore/TypedSocketEventPayload';
+import { SocketEventPayload } from '../typedSocketsCore/SocketEventPayload';
 
-export interface SimulationNodeCreatedPayload extends TypedSocketEventPayload {
+export interface SimulationNodeCreatedPayload extends SocketEventPayload {
   nodeUid: string;
   positionX: number;
   positionY: number;

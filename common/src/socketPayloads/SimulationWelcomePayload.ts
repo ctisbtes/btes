@@ -1,5 +1,5 @@
-import { TypedSocketEventPayload } from '../typedSocketsCore/TypedSocketEventPayload';
+import { SocketEventPayload } from '../typedSocketsCore/SocketEventPayload';
 
-export interface SimulationWelcomePayload extends TypedSocketEventPayload {
+export interface SimulationWelcomePayload extends SocketEventPayload {
   message: string;
 }

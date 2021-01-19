@@ -1,7 +1,6 @@
 import { SimulationSnapshot } from '../SimulationSnapshot';
-import { TypedSocketEventPayload } from '../typedSocketsCore/TypedSocketEventPayload';
+import { SocketEventPayload } from '../typedSocketsCore/SocketEventPayload';
 
-export interface SimulationSnapshotReportPayload
-  extends TypedSocketEventPayload {
+export interface SimulationSnapshotReportPayload extends SocketEventPayload {
   snapshot: SimulationSnapshot;
 }

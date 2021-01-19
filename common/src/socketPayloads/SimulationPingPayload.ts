@@ -1,5 +1,5 @@
-import { TypedSocketEventPayload } from '../typedSocketsCore/TypedSocketEventPayload';
+import { SocketEventPayload } from '../typedSocketsCore/SocketEventPayload';
 
-export interface SimulationPingPayload extends TypedSocketEventPayload {
+export interface SimulationPingPayload extends SocketEventPayload {
   date: number;
 }
