@@ -14,8 +14,12 @@ import { SimulationSnapshot } from '../common/SimulationSnapshot';
 import { SimulationRequestSnapshotPayload } from '../common/socketPayloads/SimulationRequestStatePayload';
 import { SimulationUpdateNodePositionPayload } from '../common/socketPayloads/SimulationUpdateNodePositionPayload';
 import { SimulationNodePositionUpdatedPayload } from '../common/socketPayloads/SimulationNodePositionUpdatedPayload';
+import { SocketEventListenerClass } from '../common/typedSocketsCore/SocketEventListenerClass';
+import { SimulationSocketApiManifest } from '../common/socketApiManifests/SimulationSocketApiManifest';
 
-export class Simulation {
+export class Simulation
+  implements
+    SocketEventListenerClass<SimulationSocketApiManifest, 'clientToServer'> {
   public readonly simulationUid: string;
   public readonly nodeMap: { [nodeUid: string]: SimulationNode } = {};
 
