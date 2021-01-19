@@ -1,7 +1,7 @@
 import io from 'socket.io';
 
 import { TypedSocketApiManifest } from '../../common/typedSocketsCore/TypedSocketApiManifest';
-import { TypedSocketEventNamesOf } from '../../common/typedSocketsCore/utils/TypedSocketEventNamesOf';
+import { StringKeyOf } from '../../common/utils/StringKeyOf';
 
 export class TypedSocketNamespace<TManifest extends TypedSocketApiManifest> {
   public readonly raw: io.Namespace;
@@ -11,7 +11,7 @@ export class TypedSocketNamespace<TManifest extends TypedSocketApiManifest> {
   }
 
   public readonly emit = <
-    TEventName extends TypedSocketEventNamesOf<TManifest, 'serverToClient'>
+    TEventName extends StringKeyOf<TManifest['serverToClient']>
   >(
     eventName: TEventName,
     payload: TManifest['serverToClient'][TEventName]

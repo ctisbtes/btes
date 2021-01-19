@@ -2,7 +2,7 @@ import _ from 'lodash';
 import io from 'socket.io';
 import { TypedSocketApiManifest } from '../../common/typedSocketsCore/TypedSocketApiManifest';
 import { TypedSocketEventListener } from '../../common/typedSocketsCore/TypedSocketEventListener';
-import { TypedSocketEventNamesOf } from '../../common/typedSocketsCore/utils/TypedSocketEventNamesOf';
+import { StringKeyOf } from '../../common/utils/StringKeyOf';
 
 export class TypedSocketSocket<TManifest extends TypedSocketApiManifest> {
   public readonly raw: io.Socket;
@@ -12,7 +12,7 @@ export class TypedSocketSocket<TManifest extends TypedSocketApiManifest> {
   }
 
   public readonly emit = <
-    TEventName extends TypedSocketEventNamesOf<TManifest, 'serverToClient'>
+    TEventName extends StringKeyOf<TManifest['serverToClient']>
   >(
     eventName: TEventName,
     payload: TManifest['serverToClient'][TEventName]
@@ -21,7 +21,7 @@ export class TypedSocketSocket<TManifest extends TypedSocketApiManifest> {
   };
 
   public readonly on = <
-    TEventName extends TypedSocketEventNamesOf<TManifest, 'clientToServer'>
+    TEventName extends StringKeyOf<TManifest['clientToServer']>
   >(
     eventName: TEventName,
     listener: TypedSocketEventListener<TManifest['clientToServer'][TEventName]>
@@ -30,7 +30,7 @@ export class TypedSocketSocket<TManifest extends TypedSocketApiManifest> {
   };
 
   public readonly off = <
-    TEventName extends TypedSocketEventNamesOf<TManifest, 'clientToServer'>
+    TEventName extends StringKeyOf<TManifest['clientToServer']>
   >(
     eventName: TEventName,
     listener: TypedSocketEventListener<TManifest['clientToServer'][TEventName]>
