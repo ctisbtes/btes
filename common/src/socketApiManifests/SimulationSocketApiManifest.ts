@@ -11,26 +11,42 @@ import { SimulationSnapshotReportPayload } from '../socketPayloads/SimulationSna
 import { SimulationUpdateNodePositionPayload } from '../socketPayloads/SimulationUpdateNodePositionPayload';
 import { SimulationWelcomePayload } from '../socketPayloads/SimulationWelcomePayload';
 import { SocketApiManifest } from '../typedSocketsCore/SocketApiManifest';
+import { SocketEventPayload } from '../../common/typedSocketsCore/SocketEventPayload';
 
-export interface SimulationSocketApiManifest extends SocketApiManifest {
+export interface SimulationSocketApiManifest
+  extends SocketApiManifest<'simulation'> {
   serverToClient: {
-    [socketEvents.simulation.welcome]: SimulationWelcomePayload;
-    [socketEvents.simulation.pong]: SimulationPongPayload;
-    [socketEvents.simulation.nodeCreated]: SimulationNodeCreatedPayload;
-    [socketEvents.simulation.nodeDeleted]: SimulationNodeDeletedPayload;
-    [socketEvents.simulation.snapshotReport]: SimulationSnapshotReportPayload;
+    [socketEvents.simulation.serverToClient.welcome]: SimulationWelcomePayload;
+    [socketEvents.simulation.serverToClient.pong]: SimulationPongPayload;
 
-    [socketEvents.simulation
+    [socketEvents.simulation.serverToClient
+      .nodeCreated]: SimulationNodeCreatedPayload;
+
+    [socketEvents.simulation.serverToClient
+      .nodeDeleted]: SimulationNodeDeletedPayload;
+
+    [socketEvents.simulation.serverToClient
+      .snapshotReport]: SimulationSnapshotReportPayload;
+
+    [socketEvents.simulation.serverToClient
       .nodePositionUpdated]: SimulationNodePositionUpdatedPayload;
   };
 
   clientToServer: {
-    [socketEvents.simulation.ping]: SimulationPingPayload;
-    [socketEvents.simulation.createNode]: SimulationCreateNodePayload;
-    [socketEvents.simulation.deleteNode]: SimulationDeleteNodePayload;
-    [socketEvents.simulation.requestSnapshot]: SimulationRequestSnapshotPayload;
+    [socketEvents.simulation.clientToServer.ping]: SimulationPingPayload;
 
-    [socketEvents.simulation
+    [socketEvents.simulation.clientToServer
+      .createNode]: SimulationCreateNodePayload;
+
+    [socketEvents.simulation.clientToServer
+      .deleteNode]: SimulationDeleteNodePayload;
+
+    [socketEvents.simulation.clientToServer
+      .requestSnapshot]: SimulationRequestSnapshotPayload;
+
+    [socketEvents.simulation.clientToServer
       .updateNodePosition]: SimulationUpdateNodePositionPayload;
   };
+
+  foo: { bat: SocketEventPayload };
 }

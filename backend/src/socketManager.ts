@@ -13,9 +13,12 @@ class SocketManager {
   constructor() {
     this.socketServer.use(socketLoggerMiddleware);
 
-    this.socketServer.on(socketEvents.native.connect, (socket) => {
-      emitWelcome(socket, 'root');
-    });
+    this.socketServer.on(
+      socketEvents.native.clientToServer.connect,
+      (socket) => {
+        emitWelcome(socket, 'root');
+      }
+    );
   }
 
   public readonly start = (

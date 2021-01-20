@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import io from 'socket.io';
+import { EventCategory } from '../../common/constants/socketEvents';
 import { SocketApiManifest } from '../../common/typedSocketsCore/SocketApiManifest';
 import { SocketEventHandler } from '../../common/typedSocketsCore/SocketEventHandler';
 import { StringKeyOf } from '../../common/utils/StringKeyOf';
 
-export class TypedSocket<TManifest extends SocketApiManifest> {
+export class TypedSocket<TManifest extends SocketApiManifest<EventCategory>> {
   public readonly raw: io.Socket;
 
   constructor(actual: io.Socket) {

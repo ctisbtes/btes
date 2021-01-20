@@ -53,7 +53,7 @@ class SimulationBridge {
     body: SimulationPongPayload
   ) => {
     const ns = this.nsMap[simulationUid];
-    ns.emit(socketEvents.simulation.pong, body);
+    ns.emit(socketEvents.simulation.serverToClient.pong, body);
   };
 
   public readonly sendSimulationNodeCreated = (
@@ -61,7 +61,7 @@ class SimulationBridge {
     body: SimulationNodeCreatedPayload
   ) => {
     const ns = this.nsMap[simulationUid];
-    ns.emit(socketEvents.simulation.nodeCreated, body);
+    ns.emit(socketEvents.simulation.serverToClient.nodeCreated, body);
   };
 
   public readonly sendSimulationNodeDeleted = (
@@ -69,7 +69,7 @@ class SimulationBridge {
     body: SimulationNodeDeletedPayload
   ) => {
     const ns = this.nsMap[simulationUid];
-    ns.emit(socketEvents.simulation.nodeDeleted, body);
+    ns.emit(socketEvents.simulation.serverToClient.nodeDeleted, body);
   };
 
   public readonly sendSimulationSnapshotReport = (
@@ -77,7 +77,7 @@ class SimulationBridge {
     body: SimulationSnapshotReportPayload
   ): void => {
     const ns = this.nsMap[simulationUid];
-    ns.emit(socketEvents.simulation.snapshotReport, body);
+    ns.emit(socketEvents.simulation.serverToClient.snapshotReport, body);
   };
 
   public readonly sendSimulationNodePositionUpdated = (
@@ -85,7 +85,7 @@ class SimulationBridge {
     body: SimulationNodePositionUpdatedPayload
   ) => {
     const ns = this.nsMap[simulationUid];
-    ns.emit(socketEvents.simulation.nodePositionUpdated, body);
+    ns.emit(socketEvents.simulation.serverToClient.nodePositionUpdated, body);
   };
 }
 

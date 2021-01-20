@@ -16,5 +16,5 @@ export const emitWelcome = (
     message: `Connected to socket endpoint on ${namespace} namespace with socket id: ${socket.raw.id}`,
   };
 
-  socket.emit(socketEvents.simulation.welcome, body);
+  socket.emit(socketEvents.simulation.serverToClient.welcome, body);
 };

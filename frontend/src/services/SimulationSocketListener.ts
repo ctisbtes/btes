@@ -18,21 +18,24 @@ export class SimulationSocketListener {
   constructor(simulationUid: string, socket: Socket) {
     this.socket = socket;
     this.simulationUid = simulationUid;
-    socket.on(socketEvents.simulation.pong, this.handleSimulationPong);
     socket.on(
-      socketEvents.simulation.nodeCreated,
+      socketEvents.simulation.serverToClient.pong,
+      this.handleSimulationPong
+    );
+    socket.on(
+      socketEvents.simulation.serverToClient.nodeCreated,
       this.handleSimulationNodeCreated
     );
     socket.on(
-      socketEvents.simulation.nodeDeleted,
+      socketEvents.simulation.serverToClient.nodeDeleted,
       this.handleSimulationNodeDeleted
     );
     socket.on(
-      socketEvents.simulation.snapshotReport,
+      socketEvents.simulation.serverToClient.snapshotReport,
       this.handleSimulationSnapshotReport
     );
     socket.on(
-      socketEvents.simulation.nodePositionUpdated,
+      socketEvents.simulation.serverToClient.nodePositionUpdated,
       this.handleSimulationNodePositionUpdated
     );
 
@@ -40,7 +43,7 @@ export class SimulationSocketListener {
   }
 
   public teardown = (): void => {
-    Object.values(socketEvents.simulation).forEach((event) =>
+    Object.values(socketEvents.simulation.serverToClient).forEach((event) =>
       this.socket.off(event)
     );
 
@@ -71,7 +74,11 @@ export class SimulationSocketListener {
   };
 
   private handleSimulationPong = (body: SimulationPongPayload): void => {
-    logSocketReceive(socketEvents.simulation.pong, this.simulationUid, body);
+    logSocketReceive(
+      socketEvents.simulation.serverToClient.pong,
+      this.simulationUid,
+      body
+    );
     store.dispatch(
       simulationSlice.actions.pong({
         simulationUid: this.simulationUid,
@@ -85,7 +92,7 @@ export class SimulationSocketListener {
     body: SimulationNodeCreatedPayload
   ) => {
     logSocketReceive(
-      socketEvents.simulation.nodeCreated,
+      socketEvents.simulation.serverToClient.nodeCreated,
       this.simulationUid,
       body
     );
@@ -99,7 +106,7 @@ export class SimulationSocketListener {
 
     this.dispatchLogNodeEvent(
       body.nodeUid,
-      socketEvents.simulation.nodeCreated,
+      socketEvents.simulation.serverToClient.nodeCreated,
       body
     );
   };
@@ -138,7 +145,7 @@ export class SimulationSocketListener {
 
     this.dispatchLogNodeEvent(
       body.nodeUid,
-      socketEvents.simulation.nodePositionUpdated,
+      socketEvents.simulation.serverToClient.nodePositionUpdated,
       body
     );
   };

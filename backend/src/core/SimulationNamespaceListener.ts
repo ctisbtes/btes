@@ -26,7 +26,7 @@ export class SimulationNamespaceListener {
     this.ns = ns;
     this.eventListenerClass = eventListenerClass;
 
-    ns.raw.on(socketEvents.native.connect, (socket) => {
+    ns.raw.on(socketEvents.native.clientToServer.connect, (socket) => {
       const typedSocket = new TypedSocket<SimulationSocketApiManifest>(socket);
       this.setupSocket(typedSocket);
     });
@@ -44,33 +44,33 @@ export class SimulationNamespaceListener {
   ): void => {
     // native events
     socket.raw.on(
-      socketEvents.native.disconnect,
+      socketEvents.native.clientToServer.disconnect,
       this.teardownSocket.bind(this, socket)
     );
 
     // simulation events
     socket.on(
-      socketEvents.simulation.ping,
+      socketEvents.simulation.clientToServer.ping,
       this.eventListenerClass.handleSimulationPing
     );
 
     socket.on(
-      socketEvents.simulation.createNode,
+      socketEvents.simulation.clientToServer.createNode,
       this.eventListenerClass.handleSimulationCreateNode
     );
 
     socket.on(
-      socketEvents.simulation.deleteNode,
+      socketEvents.simulation.clientToServer.deleteNode,
       this.eventListenerClass.handleSimulationDeleteNode
     );
 
     socket.on(
-      socketEvents.simulation.requestSnapshot,
+      socketEvents.simulation.clientToServer.requestSnapshot,
       this.eventListenerClass.handleSimulationRequestSnapshot
     );
 
     socket.on(
-      socketEvents.simulation.updateNodePosition,
+      socketEvents.simulation.clientToServer.updateNodePosition,
       this.eventListenerClass.handleSimulationUpdateNodePosition
     );
   };

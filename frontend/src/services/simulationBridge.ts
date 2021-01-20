@@ -32,15 +32,15 @@ class SimulationBridge {
         path: '/api/socket/socket.io',
       });
 
-      socket.on(socketEvents.native.connect, () => {
+      socket.on(socketEvents.native.serverToClient.connect, () => {
         console.log('socket connected');
       });
 
       socket.on(
-        socketEvents.simulation.welcome,
+        socketEvents.simulation.serverToClient.welcome,
         (body: SimulationWelcomePayload) => {
           logSocketReceive(
-            socketEvents.simulation.welcome,
+            socketEvents.simulation.serverToClient.welcome,
             simulationUid,
             body
           );
@@ -52,7 +52,7 @@ class SimulationBridge {
       );
 
       // only resolve connection procedure when we receive the first snapshot
-      socket.once(socketEvents.simulation.snapshotReport, () => {
+      socket.once(socketEvents.simulation.serverToClient.snapshotReport, () => {
         resolve();
       });
     });
@@ -87,14 +87,18 @@ class SimulationBridge {
     simulationUid: string,
     body: SimulationPingPayload
   ) {
-    this.emit(simulationUid, socketEvents.simulation.ping, body);
+    this.emit(simulationUid, socketEvents.simulation.clientToServer.ping, body);
   }
 
   public sendSimulationCreateNode(
     simulationUid: string,
     body: SimulationCreateNodePayload
   ) {
-    this.emit(simulationUid, socketEvents.simulation.createNode, body);
+    this.emit(
+      simulationUid,
+      socketEvents.simulation.clientToServer.createNode,
+      body
+    );
   }
 
   public sendSimulationDeleteNode(
@@ -104,17 +108,25 @@ class SimulationBridge {
     this.dispatchLogNodeEvent(
       simulationUid,
       body.nodeUid,
-      socketEvents.simulation.updateNodePosition,
+      socketEvents.simulation.clientToServer.updateNodePosition,
       body
     );
-    this.emit(simulationUid, socketEvents.simulation.deleteNode, body);
+    this.emit(
+      simulationUid,
+      socketEvents.simulation.clientToServer.deleteNode,
+      body
+    );
   }
 
   public sendSimulationRequestSnapshot(
     simulationUid: string,
     body: SimulationRequestSnapshotPayload
   ) {
-    this.emit(simulationUid, socketEvents.simulation.requestSnapshot, body);
+    this.emit(
+      simulationUid,
+      socketEvents.simulation.clientToServer.requestSnapshot,
+      body
+    );
   }
 
   public sendSimulationUpdateNodePosition(
@@ -124,10 +136,14 @@ class SimulationBridge {
     this.dispatchLogNodeEvent(
       simulationUid,
       body.nodeUid,
-      socketEvents.simulation.updateNodePosition,
+      socketEvents.simulation.clientToServer.updateNodePosition,
       body
     );
-    this.emit(simulationUid, socketEvents.simulation.updateNodePosition, body);
+    this.emit(
+      simulationUid,
+      socketEvents.simulation.clientToServer.updateNodePosition,
+      body
+    );
   }
 
   private setupNewConnection(simulationUid: string, socket: Socket) {

@@ -1,8 +1,9 @@
 import { SocketApiManifest } from './SocketApiManifest';
 import { CamelCase } from 'type-fest';
+import { EventCategory } from '../constants/socketEvents';
 
 export type SocketEventListenerClass<
-  TManifest extends SocketApiManifest,
+  TManifest extends SocketApiManifest<EventCategory>,
   TDirection extends keyof TManifest
 > = {
   [TEventName in keyof TManifest[TDirection] &
