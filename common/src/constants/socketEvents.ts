@@ -19,5 +19,8 @@ export const socketEvents = {
     redo: 'simulation-redo',
     nodeChangeLatency: 'simulation-node-change-latency',
     nodeLatencyChanged: 'simulation-node-latency-changed',
+    nodeSendMail: 'simulation-node-send-mail',
+    nodeBroadcastMail: 'simulation-node-broadcast-mail',
+    nodeMailReceived: 'simulation-node-mail-received',
   },
 } as const;

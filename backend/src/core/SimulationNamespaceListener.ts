@@ -20,6 +20,9 @@ import { SimulationUpdateNodePositionCommand } from './commands/SimulationUpdate
 import { SimulationNodeChangeLatencyCommand } from './commands/SimulationNodeChangeLatencyCommand';
 import { SimulationNodeLatencyChangedPayload } from '../common/socketPayloads/SimulationNodeLatencyChangedPayload';
 import { SimulationNodeChangeLatencyPayload } from '../common/socketPayloads/SimulationNodeChangeLatencyPayload';
+import { SimulationNodeSendMailPayload } from '../common/socketPayloads/SimulationNodeSendMailPayload';
+import { SimulationNodeBroadcastMailPayload } from '../common/socketPayloads/SimulationNodeBroadcastMailPayload';
+import { SimulationNodeMailReceivedPayload } from '../common/socketPayloads/SimulationNodeMailReceivedPayload';
 
 export class SimulationNamespaceListener {
   private readonly simulation: Simulation;
@@ -76,6 +79,13 @@ export class SimulationNamespaceListener {
     socket.on(
       socketEvents.simulation.nodeChangeLatency,
       this.handleNodeChangeLatency
+    );
+
+    socket.on(socketEvents.simulation.nodeSendMail, this.handleNodeSendMail);
+
+    socket.on(
+      socketEvents.simulation.nodeBroadcastMail,
+      this.handleNodeBroadcastMail
     );
   };
 
@@ -204,5 +214,37 @@ export class SimulationNamespaceListener {
     body: SimulationNodeLatencyChangedPayload
   ): void => {
     this.ns.emit(socketEvents.simulation.nodeLatencyChanged, body);
+  };
+
+  private readonly handleNodeSendMail = (
+    body: SimulationNodeSendMailPayload
+  ) => {
+    const createCommand = new SimulationNodeChangeLatencyCommand(
+      this.simulation,
+      this,
+      body
+    );
+
+    this.actionHistoryKeeper.register(createCommand);
+    createCommand.execute();
+  };
+
+  private readonly handleNodeBroadcastMail = (
+    body: SimulationNodeBroadcastMailPayload
+  ) => {
+    const createCommand = new SimulationNodeChangeLatencyCommand(
+      this.simulation,
+      this,
+      body
+    );
+
+    this.actionHistoryKeeper.register(createCommand);
+    createCommand.execute();
+  };
+
+  public readonly sendNodeMailReceived = (
+    body: SimulationNodeMailReceivedPayload
+  ): void => {
+    this.ns.emit(socketEvents.simulation.nodeMailReceived, body);
   };
 }
