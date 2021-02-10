@@ -17,6 +17,9 @@ import { ActionHistoryKeeper } from './undoRedo/ActionHistoryKeeper';
 import { SimulationCreateNodeCommand } from './commands/SimulationCreateNodeCommand';
 import { SimulationDeleteNodeCommand } from './commands/SimulationDeleteNodeCommand';
 import { SimulationUpdateNodePositionCommand } from './commands/SimulationUpdateNodePositionCommand';
+import { SimulationNodeChangeLatencyCommand } from './commands/SimulationNodeChangeLatencyCommand';
+import { SimulationNodeLatencyChangedPayload } from '../common/socketPayloads/SimulationNodeLatencyChangedPayload';
+import { SimulationNodeChangeLatencyPayload } from '../common/socketPayloads/SimulationNodeChangeLatencyPayload';
 
 export class SimulationNamespaceListener {
   private readonly simulation: Simulation;
@@ -69,6 +72,11 @@ export class SimulationNamespaceListener {
     );
     socket.on(socketEvents.simulation.undo, this.handleSimulationUndo);
     socket.on(socketEvents.simulation.redo, this.handleSimulationRedo);
+
+    socket.on(
+      socketEvents.simulation.nodeChangeLatency,
+      this.handleNodeChangeLatency
+    );
   };
 
   private readonly teardownSocket = (socket: Socket): void => {
@@ -177,5 +185,24 @@ export class SimulationNamespaceListener {
 
   private readonly handleSimulationRedo = () => {
     this.actionHistoryKeeper.redo();
+  };
+
+  private readonly handleNodeChangeLatency = (
+    body: SimulationNodeChangeLatencyPayload
+  ) => {
+    const createCommand = new SimulationNodeChangeLatencyCommand(
+      this.simulation,
+      this,
+      body
+    );
+
+    this.actionHistoryKeeper.register(createCommand);
+    createCommand.execute();
+  };
+
+  public readonly sendNodeLatencyChanged = (
+    body: SimulationNodeLatencyChangedPayload
+  ): void => {
+    this.ns.emit(socketEvents.simulation.nodeLatencyChanged, body);
   };
 }

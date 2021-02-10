@@ -17,5 +17,7 @@ export const socketEvents = {
     nodePositionUpdated: 'simulation-node-position-updated',
     undo: 'simulation-undo',
     redo: 'simulation-redo',
+    nodeChangeLatency: 'simulation-node-change-latency',
+    nodeLatencyChanged: 'simulation-node-latency-changed',
   },
 } as const;
