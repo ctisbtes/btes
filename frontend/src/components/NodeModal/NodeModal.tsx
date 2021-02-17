@@ -7,6 +7,8 @@ import { empty } from '../../common/utils/empty';
 import { RootState } from '../../state/RootState';
 import { NodeData } from '../../state/simulation/NodeData';
 import LogTable from '../LogTable/LogTable';
+import BlockchainTreeView from '../BlockchainTreeView/BlockchainTreeView';
+import { BlockchainData } from '../../state/simulation/BlockchainData';
 
 interface NodeModalProps {
   closeHandler: () => void;
@@ -20,6 +22,11 @@ const NodeModal: React.FC<NodeModalProps> = (props) => {
     nodeUid
       ? state.simulation[simulationUid].nodeMap[nodeUid]
       : empty<NodeData>()
+  );
+  const blockchainData = useSelector((state: RootState) =>
+    simulationUid
+      ? state.simulation[simulationUid].blockchainData
+      : empty<BlockchainData>()
   );
 
   return (
@@ -77,7 +84,7 @@ const NodeModal: React.FC<NodeModalProps> = (props) => {
             <Container>
               <Row>
                 <Col>
-                  <p>Blockchain</p>
+                  <BlockchainTreeView rootBlock={blockchainData} />
                 </Col>
               </Row>
             </Container>

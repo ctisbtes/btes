@@ -4,10 +4,44 @@ import { nodeUidGenerator } from '../utils/uidGenerators';
 import { SimulationNode } from './SimulationNode';
 import { SimulationSnapshot } from '../common/SimulationSnapshot';
 import { SimulationNodeSnapshot } from '../common/SimulationNodeSnapshot';
+import { BlockchainData } from './BlockchainData';
 
 export class Simulation {
   public readonly simulationUid: string;
   public readonly nodeMap: { [nodeUid: string]: SimulationNode } = {};
+  public readonly blockchainData: BlockchainData = {
+    hash: '34ec7g',
+    children: [
+      {
+        hash: '32380',
+        children: [
+          {
+            hash: 'e21c6',
+            children: [
+              {
+                hash: 'a6877',
+                children: [
+                  {
+                    hash: 'b1416',
+                    children: [
+                      {
+                        hash: '904e2',
+                        children: [],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                hash: '2f8b1',
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
 
   constructor(simulationUid: string) {
     this.simulationUid = simulationUid;
@@ -54,6 +88,7 @@ export class Simulation {
     return {
       simulationUid: this.simulationUid,
       nodeMap: nodeSnapshots,
+      blockchainData: this.blockchainData,
     };
   };
 }

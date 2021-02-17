@@ -11,6 +11,7 @@ import { SimulationSnapshotReportPayload } from './SimulationSnapshotReportPaylo
 import { SimulationNodePositionUpdatedActionPayload } from './SimulationNodePositionUpdatedActionPayload';
 import { SimulationLogActionPayload } from './SimulationLogActionPayload';
 import { SimulationLogNodeActionPayload } from './SimulationLogNodeActionPayload';
+import { SimulationBlockchainDataPayload } from './SimulationBlockchainDataPayload';
 
 const initialState: SimulationSliceState = {};
 
@@ -35,6 +36,7 @@ export const simulationSlice = createSlice({
         pongs: [],
         nodeMap: {},
         logs: [],
+        blockchainData: { hash: '', children: [] },
       };
     },
     pong: (state, { payload }: PayloadAction<SimulationPongActionPayload>) => {
@@ -113,6 +115,7 @@ export const simulationSlice = createSlice({
           logs: old.nodeMap[node.nodeUid]?.logs || [],
           ...node,
         })),
+        blockchainData: snapshot.blockchainData,
       };
     },
     nodePositionUpdated: (
@@ -132,6 +135,30 @@ export const simulationSlice = createSlice({
       { payload }: PayloadAction<SimulationLogNodeActionPayload>
     ) => {
       state[payload.simulationUid].nodeMap[payload.nodeUid].logs.push(payload);
+    },
+
+    blockchainData: (
+      state,
+      { payload }: PayloadAction<SimulationBlockchainDataPayload>
+    ) => {
+      const sim = state[payload.simulationUid];
+      if (!sim) {
+        console.warn(
+          'Ignoring `nodeCreated`: no simulation with given uid. Payload:',
+          payload
+        );
+        return;
+      }
+      const blockchainData = sim.blockchainData;
+
+      if (blockchainData) {
+        console.warn(
+          'Overwriting an existing blockchain data! simulationUid:',
+          payload.simulationUid
+        );
+      }
+
+      sim.blockchainData = payload.blockchainData;
     },
   },
 });
