@@ -1,6 +1,12 @@
 {
-    "exec": "yarn serve:dev",
-    "watch": ["src"],
-    "ignore": ["src/__gen/**"],
-    "ext": "ts"
+  "exec": "yarn serve",
+  "watch": ["src"],
+  "ignore": [
+    "src/__gen/",
+    "src/**/__tests__/",
+    "src/**/__mocks__/",
+    "src/**/__snapshots__/",
+    "src/**/*.spec.ts"
+  ],
+  "ext": "*"
 }
