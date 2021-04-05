@@ -3,6 +3,7 @@ import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import { RegisterRoutes } from './__gen/routes';
 import * as expressPing from 'express-ping';
+import swaggerJson from './__gen/swagger.json';
 
 export const app = express();
 
@@ -19,9 +20,7 @@ app.use(
   '/swagger',
   swaggerUi.serve,
   async (_req: ExRequest, res: ExResponse) => {
-    return res.send(
-      swaggerUi.generateHTML(await import('./__gen/swagger.json'))
-    );
+    return res.send(swaggerUi.generateHTML(swaggerJson));
   }
 );
 
