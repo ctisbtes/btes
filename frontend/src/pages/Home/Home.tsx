@@ -18,13 +18,20 @@ const Home: React.FC = () => {
             <b>Blockchain Technology For Everyone</b>
           </span>
         </div>
-        <div className="page-home--header-info d-flex justify-content-center col-lg-8 col-12 text-center">
-          <span>
+        <div className="page-home--header-info d-flex justify-content-center col-lg-8 col-12 mt-4 text-center">
+          <span className="content-text">
             <i>
               BTES is an educational tool for learning Blockchain technology.
               Our platform is designed for everyone including software
               developers, information systems’ designers and students wants to
-              learn this technology.
+              learn this technology. <br></br> <br></br>All the operations that
+              need to be done regarding the blockchain is here; you can find an
+              active simulation and documentations for a whole system that
+              divide into chapters as block, transaction, mining, public/private
+              key generating, blockchain protocol and so on... BTES allows you
+              to continue with your choice, independent or taken guided. Also,to
+              be better understanding real world trade, explorer page provides
+              blockchain global market simultaneously.{' '}
             </i>
           </span>
         </div>
