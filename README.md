@@ -13,8 +13,8 @@ Monorepo for Blockchain Technology Education Software project.
 1. If you already have `nvm` (Node Version Manager) installed, skip this step. Otherwise install `nvm`:
     * On Windows: https://github.com/coreybutler/nvm-windows
     * On Linux: https://github.com/nvm-sh/nvm
-1. Run `nvm install 12.0.0`.
-1. **(Repeat)** Run `nvm use 12.0.0`.
+1. Run `nvm install 12.22.3`.
+1. **(Repeat)** Run `nvm use 12.22.3`.
 1. If you already have `yarn` installed, skip this step. Otherwise, run `npm i -g yarn`.
 1. Clone the repo and navigate to its root.
 1. Create a `.env` file in `/frontend` folder. Take a look at `/frontend/.env.example` file for an example.
