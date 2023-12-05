@@ -121,7 +121,8 @@ export class Simulation {
       blockchainTxDb,
       blockchainBlockDb,
       blockchainMiner,
-      this.blockchainConfig
+      this.blockchainConfig,
+      {}
     );
 
     const newNode = new SimulationNode(
@@ -196,7 +197,8 @@ export class Simulation {
       blockchainTxDb,
       blockchainBlockDb,
       blockchainMiner,
-      nodeSnapshot.blockchainApp.config
+      nodeSnapshot.blockchainApp.config,
+      nodeSnapshot.blockchainApp.blockHashToSenderNodeUidMap
     );
 
     const newNode = new SimulationNode(

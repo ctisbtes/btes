@@ -35,7 +35,7 @@ export class BlockchainNetwork {
       this.timerService.createTimer({
         waitTimeInMs: connection.latencyInMs,
         onDone: () => {
-          recipientNode.blockchainApp.receiveBlock(block);
+          recipientNode.blockchainApp.receiveBlock(block, this.nodeUid);
         },
       });
     }
@@ -52,5 +52,52 @@ export class BlockchainNetwork {
         },
       });
     }
+  };
+
+  public readonly requestBlock = (
+    blockHash: string,
+    fromNodeUid: string
+  ): void => {
+    for (const connection of this.connections) {
+      const otherNode = connection.getOtherNode(this.nodeUid);
+
+      if (otherNode.nodeUid === fromNodeUid) {
+        this.timerService.createTimer({
+          waitTimeInMs: connection.latencyInMs,
+          onDone: () => {
+            otherNode.blockchainApp.sendBlockIfWeHaveIt(
+              blockHash,
+              this.nodeUid
+            );
+          },
+        });
+
+        return;
+      }
+    }
+
+    throw new Error(`No connection to node with uid ${fromNodeUid}`);
+  };
+
+  public readonly sendBlock = (
+    block: BlockchainBlock,
+    toNodeUid: string
+  ): void => {
+    for (const connection of this.connections) {
+      const otherNode = connection.getOtherNode(this.nodeUid);
+
+      if (otherNode.nodeUid === toNodeUid) {
+        this.timerService.createTimer({
+          waitTimeInMs: connection.latencyInMs,
+          onDone: () => {
+            otherNode.blockchainApp.receiveBlock(block, this.nodeUid);
+          },
+        });
+
+        return;
+      }
+    }
+
+    throw new Error(`No connection to node with uid ${toNodeUid}`);
   };
 }

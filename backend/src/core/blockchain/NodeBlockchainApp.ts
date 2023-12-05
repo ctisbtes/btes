@@ -17,6 +17,7 @@ import { BlockchainTx } from '../../common/blockchain/tx/BlockchainTx';
 export class NodeBlockchainApp {
   // Data
   private readonly config: BlockchainConfig;
+  private readonly blockHashToSenderNodeUidMap: Record<string, string>;
 
   // Stateful Modules
   public readonly wallet: BlockchainWallet;
@@ -35,7 +36,8 @@ export class NodeBlockchainApp {
     txDb: BlockchainTxDb,
     blockDb: BlockchainBlockDb,
     miner: BlockchainMiner,
-    config: BlockchainConfig
+    config: BlockchainConfig,
+    blockHashToSenderNodeUidMap: Record<string, string>
   ) {
     this.network = network;
     this.wallet = wallet;
@@ -43,6 +45,7 @@ export class NodeBlockchainApp {
     this.txDb = txDb;
     this.blockDb = blockDb;
     this.config = config;
+    this.blockHashToSenderNodeUidMap = blockHashToSenderNodeUidMap;
 
     const commonChecker = new BlockchainCommonChecker(config, blockDb, txDb);
     this.txChecker = new BlockchainTxChecker(commonChecker);
@@ -63,10 +66,17 @@ export class NodeBlockchainApp {
       txDb: this.txDb.takeSnapshot(),
       blockDb: this.blockDb.takeSnapshot(),
       config: this.config,
+      blockHashToSenderNodeUidMap: this.blockHashToSenderNodeUidMap,
     };
   };
 
-  public readonly receiveBlock = (block: BlockchainBlock): void => {
+  public readonly receiveBlock = (
+    block: BlockchainBlock,
+    senderNodeUid: string
+  ): void => {
+    // remember the sender
+    this.blockHashToSenderNodeUidMap[hashBlock(block.header)] = senderNodeUid;
+
     // CheckBlockForReceiveBlock
     const checkResult = this.blockChecker.checkBlockForReceiveBlock(block);
 
@@ -75,7 +85,8 @@ export class NodeBlockchainApp {
       // bc11... add this to orphan blocks...
       this.blockDb.addToOrphanage(block);
 
-      // TODO: bc11... then query peer we got this from for 1st missing orphan block in prev chain...
+      // bc11... then query peer we got this from for 1st missing orphan block in prev chain...
+      this.network.requestBlock(block.header.previousHash, senderNodeUid);
 
       // bc11... done with block
       return;
@@ -99,7 +110,13 @@ export class NodeBlockchainApp {
 
         // bc19. For each orphan block for which this block is its prev, run all these steps (including this one) recursively on that orphan
         const blockHash = hashBlock(block.header);
-        this.blockDb.popOrphansWithParent(blockHash).forEach(this.receiveBlock);
+        const orphanChildren = this.blockDb.popOrphansWithParent(blockHash);
+        for (const orphanChild of orphanChildren) {
+          const senderNodeUid = this.blockHashToSenderNodeUidMap[
+            hashBlock(orphanChild.header)
+          ];
+          this.receiveBlock(orphanChild, senderNodeUid);
+        }
       }
     }
   };
@@ -129,5 +146,22 @@ export class NodeBlockchainApp {
       const txHash = hashTx(tx);
       this.txDb.popOrphansWithTxAsInput(txHash).forEach(this.receiveTx);
     }
+  };
+
+  public readonly sendBlockIfWeHaveIt = (
+    blockHash: string,
+    toNodeUid: string
+  ): void => {
+    const getBlockResult = this.blockDb.getBlockAnywhere(blockHash);
+
+    if (getBlockResult.foundIn === 'blockchain') {
+      const block = getBlockResult.result.data;
+      this.network.sendBlock(block, toNodeUid);
+    } else if (getBlockResult.foundIn === 'orphanage') {
+      const block = getBlockResult.result;
+      this.network.sendBlock(block, toNodeUid);
+    }
+
+    // we do not have the requested block. do nothing.
   };
 }

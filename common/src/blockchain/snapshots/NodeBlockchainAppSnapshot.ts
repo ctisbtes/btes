@@ -17,4 +17,5 @@ export interface NodeBlockchainAppSnapshot {
   readonly blockDb: BlockchainBlockDbSnapshot;
 
   readonly config: BlockchainConfig;
+  readonly blockHashToSenderNodeUidMap: Record<string, string>;
 }
