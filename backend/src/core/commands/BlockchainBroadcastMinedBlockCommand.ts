@@ -21,6 +21,6 @@ export class BlockchainBroadcastMinedBlockCommand implements SimulationCommand {
 
     const minedBock = blockchainApp.miner.assembleMinedBlock();
     blockchainApp.miner.dismissStoppedState();
-    blockchainApp.receiveBlock(minedBock);
+    blockchainApp.receiveBlock(minedBock, this.eventPayload.nodeUid);
   };
 }
